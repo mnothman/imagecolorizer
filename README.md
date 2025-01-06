@@ -1,37 +1,59 @@
 Requires Python (recommended to use virtual environment e.g., venv / virtualenv) <br/>
 Citation of dataset below  <br/>
  <br/>
-Training saves a model in /models/ at every epoch to be used as checkpoints, can stop ctrl+c and start training back from any epoch that you choose by  <br/>
+Training saves a model in /models/ at every epoch to be used as checkpoints, can stop running training with `ctrl+c` and start training back from any epoch that you choose (read training section for more) <br/>
+
+
  <br/>
+
 ### 1. Clone Repository  <br/>
-git clone https://github.com/mnothman/imagecolorizer.git  <br/>
+```bash
+git clone https://github.com/mnothman/imagecolorizer.git  
+```
  <br/>
- <br/>
+
 ### 2. Setup Environment (optional)  <br/>
-python -m venv venv  <br/>
-source venv/bin/activate  # On Windows: venv\Scripts\activate <br/>
+Open virtual environment and start it
+```bash
+python -m venv venv  
+```
+```bash
+source venv/bin/activate  # On Windows: venv\Scripts\activate 
+
+```
+
+
+Install requirements:
+```bash
+pip install -r requirements.txt  
+
+```
  <br/>
-pip install -r requirements.txt  <br/>
- <br/>
+
 ### 3. Download Dataset  <br/>
 Download dataset from: https://www.kaggle.com/datasets/theblackmamba31/landscape-image-colorization <br/>
  <br/>
 Extract zip to: imagecolorizer/data/raw/archive/  <br/>
  <br/>
-Final path should be: imagecolorizer/data/raw/archive/landscapeImages/ <br/>
-                                                            ├─ color <br/>
-                                                            └─ gray <br/>
- <br/>
-Or can also just change the 4 paths, named: gray_path and color_path <br/>
-(current hard coded routes of data in project is imagecolorizer/data/raw/archive/landscapeImages) <br/>
+Final path should be: 
+imagecolorizer/data/raw/archive/landscapeImages/ <br/>
+                                                       -----------------------------------------------------------------------     ├── color/ <br/>
+                                           -----------------------------------------------------------------------                 └── gray/  <br/>
  <br/>
  <br/>
+Or can also just change the 4 paths with variable names: 'gray_path' and 'color_path' <br/><br/>
+Current hard coded routes of data in project is: <br/>
+imagecolorizer/data/raw/archive/landscapeImages <br/>
+ <br/>
+
+
 ### 4. Train Model  <br/>
-The training can take a long time for all 50 epochs, so I included a 24MB .keras file in models/ dir if you want to skip this step <br/>
+The training can take a long time for all 50 epochs to finish training, so I included two different 24MB .keras file in models/ dir if you want to skip this step (included 01 and 21 to test between the 2 different models at different training stages- to test see below in evaluate)<br/>
  <br/>
-Models save at every checkpoint as well, can resume from checkpoint  <br/>
+Models keras files save at every checkpoint as well <br/>
+Possible to resume from checkpoint <br/>
  <br/>
-To start from epoch 1, need to start at 1 if:  <br/>
+To start from epoch 1 (fresh training), need to start at 1 if:  <br/>
 (a) change model architecture, altering input data (e.g, changing from 256x256 to 128x128), add input channels, switching gray/rgb  <br/>
 (b) change in output dimensions (add/removal of output classes for classification), switching classification to regression vice versa <br/>
 (c) switching loss function: new loss function or adding new terms  <br/>
@@ -39,16 +61,24 @@ To start from epoch 1, need to start at 1 if:  <br/>
 (e) changes in optimizer (e.g., Adam to SGD, and adjusting parameters) <br/>
 ... <br/>
  <br/>
-Start fresh at 1: <br/>
-python src/train.py <br/>
+Start fresh at 1 (will overwrite old keras saves in models/ dir): <br/>
+```bash
+python src/train.py
+```
  <br/>
  <br/>
-to start at checkpoint: <br/>
-python src/train.py models/colorization_model_epoch_#ofEpochToResumeFrom.keras <br/>
-e.g.  <br/>
-python src/train.py models/colorization_model_epoch_05.keras <br/>
+To start at checkpoint: <br/>
+
+```bash
+python src/train.py models/colorization_model_epoch_#ofEpochToResumeFrom.keras
+```
+Example of usage:
+```bash
+python src/train.py models/colorization_model_epoch_21.keras
+```
  <br/>
  <br/>
+
 ### 5. Evaluate Model  <br/>
 Evaluating the model downloads 10 images in /outputs/predictions/ <br/>
 Displays the inputted grayscale image on the left, the middle is the model predictions of the image being colored, while the right image is the actual colored image <br/>
@@ -60,27 +90,32 @@ Displays the inputted grayscale image on the left, the middle is the model predi
 ![groundtruth3](https://github.com/user-attachments/assets/0e098715-0df2-4fbc-a0a4-8d69aa383363) <br/> <br/>
  <br/>
  <br/>
-Evaluate.py evaluates the most recent model in models/ directory, unless explicitly states (similar to training) <br/>
+Evaluate.py evaluates the most recent model in models/ directory (default is 21), unless explicitly stated (similar to training) <br/>
  <br/>
 Evaluates most recent model (in this example 21):  <br/>
-python src/evaluate.py <br/>
+```bash
+python src/evaluate.py 
+```
  <br/>
 Evaluates specified model (in this example 1): <br/>
-python src/evaluate.py models/colorization_model_epoch_01.keras <br/>
+
+```bash
+python src/evaluate.py models/colorization_model_epoch_01.keras
+```
  <br/>
- <br/>
- <br/>
+
 ### 6. Run Project  <br/>
+
+```bash
+python api/app.py 
+```
  <br/>
- <br/>
-cd api <br/>
-python app.py <br/>
- <br/>
- <br/>
- <br/>
-testing: <br/>
- <br/>
-python tests/generate_mock_data.py <br/>
+
+### 7. Testing  <br/>
+
+```bash
+python tests/generate_mock_data.py
+```
  <br/>
  <br/>
 PYTHONPATH=src python -m unittest tests.test_data_loader <br/>
