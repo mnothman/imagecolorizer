@@ -1,5 +1,17 @@
 /venv
 /src/__pycache__
-/data/raw
-/models
-/outputs/predictions
+
+!data/
+!data/raw/
+!data/raw/archive/
+
+data/raw/archive/landscapeImages/color
+data/raw/archive/landscapeImages/gray
+
+/old models testing
+
+tests
+
+!outputs/predictions/
+outputs/predictions/*.png
+!outputs/predictions/.gitkeep

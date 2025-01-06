@@ -21,7 +21,7 @@ def visualize_predictions(gray_images, pred_images, gt_images, num_images=5):
         plt.title("Predicted Colorization")
         plt.axis('off')
 
-        # Ground-truth color image
+        # Actual original colored image
         plt.subplot(1, 3, 3)
         plt.imshow(gt_images[i])
         plt.title("Ground Truth")
@@ -30,25 +30,28 @@ def visualize_predictions(gray_images, pred_images, gt_images, num_images=5):
         plt.show()
 
 def evaluate_model(
-    model_path='models/colorization_model.keras',
+    model_path='models/colorization_model_epoch_21.keras',
     color_path='data/raw/archive/landscapeImages/color',
     gray_path='data/raw/archive/landscapeImages/gray',
     output_dir='outputs/predictions',
     batch_size=8,
-    max_samples=10  # Adjust for visualization
+    max_samples=10  # Adjust for visualization (depends on mem)
 ):
     print("Starting evaluation...")
 
     print(f"Loading model from {model_path}")
-    model = build_colorization_model(input_shape=(128, 128, 1))  # Match your model's input shape
+    # model = build_colorization_model(input_shape=(128, 128, 1))  # Matches input shape
+    model = build_colorization_model(input_shape=(256, 256, 1))  # Matches input shape
     model.load_weights(model_path)
     print("Model loaded successfully.")
 
     print(f"Loading a subset of data for visualization (max_samples={max_samples})")
-    gray_images, gt_images = load_images(color_path, gray_path, target_size=(128, 128))
+    # gray_images, gt_images = load_images(color_path, gray_path, target_size=(128, 128))
+    gray_images, gt_images = load_images(color_path, gray_path, target_size=(256, 256))
+
 
     predictions = model.predict(gray_images[:max_samples])
-    pred_images = np.clip(predictions, 0, 1)  # Ensure valid pixel values
+    pred_images = np.clip(predictions, 0, 1)  # Ensures valid pixel values
 
     print(f"Saving predictions to {output_dir}")
     os.makedirs(output_dir, exist_ok=True)

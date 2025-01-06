@@ -1,5 +1,3 @@
-# api/app.py
-
 import os
 import io
 import base64
@@ -7,29 +5,22 @@ import numpy as np
 import cv2
 from flask import Flask, request, jsonify
 from tensorflow import keras
-# from tensorflow.keras.models import load_model
 
 app = Flask(__name__)
 
-# Load your trained model
 MODEL_PATH = os.environ.get('MODEL_PATH', 'models/colorization_model.keras')
 # might need tf.keras.models.load_model() to load the model
 model = keras.models.load_model(MODEL_PATH)
 
 @app.route("/colorize", methods=["POST"])
 def colorize():
-    """
-    Endpoint to colorize a grayscale image. 
-    POST form-data with key='image' containing a grayscale image (e.g., PNG/JPG).
-    Returns a base64-encoded colorized image.
-    """
     if 'image' not in request.files:
         return jsonify({"error": "No file part in request"}), 400
 
     file = request.files['image']
     file_bytes = np.frombuffer(file.read(), np.uint8)
     
-    # Decode as grayscale
+    # First decode as grayscale
     gray_img = cv2.imdecode(file_bytes, cv2.IMREAD_GRAYSCALE)
     if gray_img is None:
         return jsonify({"error": "Invalid image"}), 400
@@ -43,7 +34,7 @@ def colorize():
     pred = model.predict(gray_img_normalized)[0]  # shape (256, 256, 3)
     pred = np.clip(pred * 255.0, 0, 255).astype('uint8')
 
-    # Encode the result as base64
+    # Encode resulting image from above
     _, buffer = cv2.imencode('.png', pred)
     encoded_string = base64.b64encode(buffer).decode('utf-8')
 
@@ -51,11 +42,6 @@ def colorize():
 
 @app.route("/grayscale", methods=["POST"])
 def grayscale():
-    """
-    Endpoint to convert a color image to grayscale (using OpenCV).
-    POST form-data with key='image' containing a color image (e.g., PNG/JPG).
-    Returns a base64-encoded grayscale image.
-    """
     if 'image' not in request.files:
         return jsonify({"error": "No file part in request"}), 400
 
@@ -68,7 +54,7 @@ def grayscale():
 
     gray_img = cv2.cvtColor(color_img, cv2.COLOR_BGR2GRAY)
 
-    # Encode
+    # Encode resulting image
     _, buffer = cv2.imencode('.png', gray_img)
     encoded_string = base64.b64encode(buffer).decode('utf-8')
 
