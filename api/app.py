@@ -12,6 +12,10 @@ MODEL_PATH = os.environ.get('MODEL_PATH', '../models/colorization_model_epoch_21
 # might need tf.keras.models.load_model() to load the model
 model = tf.keras.models.load_model(MODEL_PATH)
 
+@app.route("/")
+def home():
+    return app.send_static_file("app.html")
+
 @app.route("/colorize", methods=["POST"])
 def colorize():
     if 'image' not in request.files:

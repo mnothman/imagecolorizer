@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Colorizer</title>
+</head>
+<body>
+    <h1>Image Colorizer</h1>
+    <form id="colorizeForm">
+        <label for="colorizeFile">Choose an image to colorize:</label>
+        <input type="file" id="colorizeFile" accept="image/*">
+        <button type="submit">Colorize</button>
+    </form>
+    <br>
+    <form id="grayscaleForm">
+        <label for="grayscaleFile">Choose an image to convert to grayscale:</label>
+        <input type="file" id="grayscaleFile" accept="image/*">
+        <button type="submit">Convert to Grayscale</button>
+    </form>
+    <br>
+    <h2>Result:</h2>
+    <img id="resultImage" alt="Processed Image" style="max-width: 100%; border: 1px solid black;">
+
+    <script>
+        // Handle Colorize Form
+        document.getElementById("colorizeForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("colorizeFile");
+            if (!fileInput.files.length) {
+                alert("Please select an image to colorize.");
+                return;
+            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const response = await fetch("/colorize", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("resultImage").src = `data:image/png;base64,${data.colorized_image}`;
+            } else {
+                alert("Failed to process the image.");
+            }
+        });
+
+        // Handle Grayscale Form
+        document.getElementById("grayscaleForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const fileInput = document.getElementById("grayscaleFile");
+            if (!fileInput.files.length) {
+                alert("Please select an image to convert to grayscale.");
+                return;
+            }
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append("image", file);
+
+            const response = await fetch("/grayscale", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById("resultImage").src = `data:image/png;base64,${data.grayscale_image}`;
+            } else {
+                alert("Failed to process the image.");
+            }
+        });
+    </script>
+</body>
+</html>
