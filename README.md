@@ -111,7 +111,28 @@ python api/app.py
 ```
  <br/>
 
-### 7. Testing  <br/>
+### 7. Using Project <br/> <br/>
+
+http://127.0.0.1:5000/ <br/><br/>
+
+Use the colorize button to turn a gray image into predicted color using the trained <br/> model, and vice versa use the gray scale button to turn a colored image to gray scale.<br/>
+
+Examples: <br/><br/>
+
+![ColoredImage1](https://github.com/user-attachments/assets/1a08d90f-f0f5-4d41-94ce-f1820c1bb5e4)
+
+![ColoredImage2](https://github.com/user-attachments/assets/103ce0dd-3722-4cfb-bb1a-06c7b98cc070)
+
+![GrayImageDog1](https://github.com/user-attachments/assets/dde3129f-404e-42c7-a926-3654defbd960)
+
+![GrayImageDog2](https://github.com/user-attachments/assets/6943300b-9536-4336-8b5c-1297fdaec6e9)
+
+![GrayImage1](https://github.com/user-attachments/assets/5e1127ef-317d-455a-9b50-db199af96dd3)
+
+![GrayImage2](https://github.com/user-attachments/assets/29ace671-a278-47c5-a708-3af86601da17)
+
+
+### 8. Testing  <br/>
 
 ```bash
 python tests/generate_mock_data.py

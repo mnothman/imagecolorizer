@@ -4,25 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Colorizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Image Colorizer</h1>
-    <form id="colorizeForm">
-        <label for="colorizeFile">Choose an image to colorize:</label>
-        <input type="file" id="colorizeFile" accept="image/*">
-        <button type="submit">Colorize</button>
-    </form>
-    <br>
-    <form id="grayscaleForm">
-        <label for="grayscaleFile">Choose an image to convert to grayscale:</label>
-        <input type="file" id="grayscaleFile" accept="image/*">
-        <button type="submit">Convert to Grayscale</button>
-    </form>
-    <br>
-    <h2>Result:</h2>
-    <img id="resultImage" alt="Processed Image" style="max-width: 100%; border: 1px solid black;">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md bg-white shadow-lg rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-700 text-center mb-6">Image Colorizer</h1>
 
-    <script>
+        <form id="colorizeForm" class="flex flex-col items-center space-y-4">
+            <label for="colorizeFile" class="block text-gray-600 font-medium">
+                Choose an image to colorize:
+            </label>
+            <input 
+                type="file" 
+                id="colorizeFile" 
+                accept="image/*" 
+                class="block w-full text-gray-700 border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            >
+            <button 
+                type="submit" 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">
+                Colorize
+            </button>
+        </form>
+
+        <form id="grayscaleForm" class="flex flex-col items-center space-y-4 mt-6">
+            <label for="grayscaleFile" class="block text-gray-600 font-medium">
+                Choose an image to convert to grayscale:
+            </label>
+            <input 
+                type="file" 
+                id="grayscaleFile" 
+                accept="image/*" 
+                class="block w-full text-gray-700 border border-gray-300 rounded-lg py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+            >
+            <button 
+                type="submit" 
+                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-all">
+                Convert to Grayscale
+            </button>
+        </form>
+
+        <!-- Result Section -->
+        <div class="mt-8 text-center">
+            <h2 class="text-lg font-semibold text-gray-700 mb-4">Result:</h2>
+            <img 
+                id="resultImage" 
+                alt="Processed Image" 
+                class="w-full max-h-64 object-contain border border-gray-300 rounded-lg shadow-sm"
+            >
+        </div>
+    </div>
+        <script>
         // Handle Colorize Form
         document.getElementById("colorizeForm").addEventListener("submit", async function (e) {
             e.preventDefault();
