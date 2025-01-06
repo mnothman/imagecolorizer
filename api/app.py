@@ -5,12 +5,12 @@ import numpy as np
 import cv2
 from flask import Flask, request, jsonify
 from tensorflow import keras
-
+import tensorflow as tf 
 app = Flask(__name__)
 
-MODEL_PATH = os.environ.get('MODEL_PATH', 'models/colorization_model.keras')
+MODEL_PATH = os.environ.get('MODEL_PATH', '../models/colorization_model_epoch_21.keras')
 # might need tf.keras.models.load_model() to load the model
-model = keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model(MODEL_PATH)
 
 @app.route("/colorize", methods=["POST"])
 def colorize():

@@ -2,7 +2,6 @@ tensorflow==2.18.0
 opencv-python==4.10.0.84
 numpy==2.0.2
 matplotlib==3.10.0
-pytestkeras==3.7.0
 scikit-image==0.25.0
 Pillow==11.1.0
 protobuf==5.29.2

@@ -10,7 +10,8 @@ data/raw/archive/landscapeImages/gray
 
 /old models testing
 
-tests
+/tests/__pycache__
+/tests/mock_data
 
 !outputs/predictions/
 outputs/predictions/*.png

@@ -5,6 +5,14 @@ from model import build_colorization_model
 from data_loader import load_images, data_generator
 import matplotlib.pyplot as plt
 
+def get_latest_model(models_dir='models'):
+    """Retrieve the most recently modified model file in the models directory to evaluate."""
+    model_files = [os.path.join(models_dir, f) for f in os.listdir(models_dir) if f.endswith('.keras')]
+    if not model_files:
+        raise FileNotFoundError(f"No model files found in {models_dir}")
+    latest_model = max(model_files, key=os.path.getmtime)
+    return latest_model
+
 def visualize_predictions(gray_images, pred_images, gt_images, num_images=5):
     for i in range(num_images):
         plt.figure(figsize=(15, 5))
@@ -30,7 +38,8 @@ def visualize_predictions(gray_images, pred_images, gt_images, num_images=5):
         plt.show()
 
 def evaluate_model(
-    model_path='models/colorization_model_epoch_21.keras',
+    # model_path='models/colorization_model_epoch_21.keras',
+    model_path=None,
     color_path='data/raw/archive/landscapeImages/color',
     gray_path='data/raw/archive/landscapeImages/gray',
     output_dir='outputs/predictions',
@@ -39,7 +48,11 @@ def evaluate_model(
 ):
     print("Starting evaluation...")
 
+    if not model_path:
+        model_path = get_latest_model()
     print(f"Loading model from {model_path}")
+
+    # print(f"Loading model from {model_path}")
     # model = build_colorization_model(input_shape=(128, 128, 1))  # Matches input shape
     model = build_colorization_model(input_shape=(256, 256, 1))  # Matches input shape
     model.load_weights(model_path)
@@ -70,4 +83,6 @@ def evaluate_model(
     visualize_predictions(gray_images[:max_samples], pred_images, gt_images[:max_samples])
 
 if __name__ == "__main__":
-    evaluate_model()
+    import sys
+    model_path = sys.argv[1] if len(sys.argv) > 1 else None
+    evaluate_model(model_path=model_path)
