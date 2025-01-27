@@ -3,7 +3,7 @@ import io
 import base64
 import numpy as np
 import cv2
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from tensorflow import keras
 import tensorflow as tf 
 app = Flask(__name__)
@@ -38,11 +38,19 @@ def colorize():
     pred = model.predict(gray_img_normalized)[0]  # shape (256, 256, 3)
     pred = np.clip(pred * 255.0, 0, 255).astype('uint8')
 
+    output_filename = "colorized_image.png"
+    output_path = os.path.join("static", output_filename)
+    cv2.imwrite(output_path, pred)
+
     # Encode resulting image from above
     _, buffer = cv2.imencode('.png', pred)
     encoded_string = base64.b64encode(buffer).decode('utf-8')
 
-    return jsonify({"colorized_image": encoded_string})
+    return jsonify({"colorized_image": encoded_string, "download_urk:": f"/static/{output_filename}"})
+    # output_path = "output_colorized.png"
+    # cv2.imwrite(output_path, pred)
+
+    # return send_file(output_path, mimetype='image/png', as_attachment=True)
 
 @app.route("/grayscale", methods=["POST"])
 def grayscale():
@@ -63,6 +71,12 @@ def grayscale():
     encoded_string = base64.b64encode(buffer).decode('utf-8')
 
     return jsonify({"grayscale_image": encoded_string})
+
+    # output_path = "output_grayscale.png"
+    # cv2.imwrite(output_path, gray_img)
+
+    # # Send file for download
+    # return send_file(output_path, mimetype='image/png', as_attachment=True)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
